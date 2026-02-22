@@ -126,7 +126,7 @@ function RyuuLib:CreateWindow(config)
     Window.TabList = {}
 
     local title = config.Title or "Ryuu Lib"
-    local animName = config.AnimName or "Initializing..."
+    local animName = config.AnimName or "Loading..."
     local animText = config.AnimText or "RE Ryuu Lib"
 
     local BorderFrame = Instance.new("Frame")
@@ -169,7 +169,7 @@ function RyuuLib:CreateWindow(config)
     TitleLabel.Size = UDim2.new(1, -80, 1, 0)
     TitleLabel.Position = UDim2.new(0, 14, 0, 0)
     TitleLabel.BackgroundTransparency = 1
-    TitleLabel.Text = "Windows V1.0" .. title
+    TitleLabel.Text = "Library 1.0 " .. title
     TitleLabel.TextColor3 = TEXT_BLUE
     TitleLabel.Font = Enum.Font.Code
     TitleLabel.TextSize = 14
@@ -182,7 +182,7 @@ function RyuuLib:CreateWindow(config)
     MinBtn.Position = UDim2.new(1, -58, 0.5, -10)
     MinBtn.BackgroundColor3 = BG_CARD
     MinBtn.Text = "-"
-    MinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
+    MinBtn.TextColor3 = TEXT_WHITE
     MinBtn.Font = Enum.Font.Code
     MinBtn.TextSize = 16
     MinBtn.BorderSizePixel = 0
@@ -198,9 +198,9 @@ function RyuuLib:CreateWindow(config)
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Size = UDim2.new(0, 26, 0, 20)
     CloseBtn.Position = UDim2.new(1, -28, 0.5, -10)
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 0, 0)
     CloseBtn.Text = "X"
-    CloseBtn.TextColor3 = TEXT_BLUE
+    CloseBtn.TextColor3 = TEXT_WHITE
     CloseBtn.Font = Enum.Font.Code
     CloseBtn.TextSize = 12
     CloseBtn.BorderSizePixel = 0
@@ -209,7 +209,7 @@ function RyuuLib:CreateWindow(config)
 
     Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 5)
     local CloseStroke = Instance.new("UIStroke")
-    CloseStroke.Color = BLUE
+    CloseStroke.Color = WHITE
     CloseStroke.Thickness = 1.5
     CloseStroke.Parent = CloseBtn
 
