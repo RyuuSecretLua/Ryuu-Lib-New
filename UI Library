@@ -90,6 +90,7 @@ local function makeSplash(title, animName, animText, callback)
     spinConn = RunService.Heartbeat:Connect(function(dt)
         rotation = rotation + dt * 300
         EmojiLabel.Rotation = rotation
+        EmojiLabel.TextColor3 = BLUE
     end)
 
     TweenService:Create(Splash, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {BackgroundTransparency = 0}):Play()
@@ -332,9 +333,10 @@ function RyuuLib:CreateWindow(config)
         Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
 
         local TabStroke = Instance.new("UIStroke")
-        TabStroke.Color = BLUE_DIM
-        TabStroke.Thickness = 1
-        TabStroke.Transparency = 0.6
+        TabStroke.Color = BLUE
+        TabStroke.Thickness = 1.5
+        TabStroke.Transparency = 1
+        TabStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
         TabStroke.Parent = TabBtn
 
         local TabContent = Instance.new("ScrollingFrame")
@@ -368,11 +370,11 @@ function RyuuLib:CreateWindow(config)
         local function selectTab()
             for _, t in pairs(Window.TabList) do
                 TweenService:Create(t.btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(80, 130, 180), BackgroundTransparency = 1}):Play()
-                t.stroke.Transparency = 0.6
+                TweenService:Create(t.stroke, TweenInfo.new(0.2), {Transparency = 1}):Play()
                 t.content.Visible = false
             end
             TweenService:Create(TabBtn, TweenInfo.new(0.2), {TextColor3 = TEXT_BLUE, BackgroundTransparency = 0}):Play()
-            TabStroke.Transparency = 0
+            TweenService:Create(TabStroke, TweenInfo.new(0.2), {Transparency = 0}):Play()
             TabContent.Visible = true
         end
 
@@ -395,13 +397,15 @@ function RyuuLib:CreateWindow(config)
             Row.Parent = TabContent
 
             Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
+
             local RowStroke = Instance.new("UIStroke")
             RowStroke.Color = BLUE_DIM
             RowStroke.Thickness = 1
+            RowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             RowStroke.Parent = Row
 
             local Label = Instance.new("TextLabel")
-            Label.Size = UDim2.new(1, -60, 1, 0)
+            Label.Size = UDim2.new(1, -62, 1, 0)
             Label.Position = UDim2.new(0, 12, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = label
@@ -411,19 +415,20 @@ function RyuuLib:CreateWindow(config)
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Parent = Row
 
-            local ToggleBtn = Instance.new("TextButton")
-            ToggleBtn.Size = UDim2.new(0, 40, 0, 20)
-            ToggleBtn.Position = UDim2.new(1, -50, 0.5, -10)
-            ToggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
-            ToggleBtn.Text = ""
-            ToggleBtn.BorderSizePixel = 0
-            ToggleBtn.Parent = Row
+            local ToggleBG = Instance.new("Frame")
+            ToggleBG.Size = UDim2.new(0, 40, 0, 20)
+            ToggleBG.Position = UDim2.new(1, -50, 0.5, -10)
+            ToggleBG.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
+            ToggleBG.BorderSizePixel = 0
+            ToggleBG.Parent = Row
 
-            Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(1, 0)
+            Instance.new("UICorner", ToggleBG).CornerRadius = UDim.new(1, 0)
+
             local TStroke = Instance.new("UIStroke")
             TStroke.Color = BLUE
             TStroke.Thickness = 1.5
-            TStroke.Parent = ToggleBtn
+            TStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            TStroke.Parent = ToggleBG
 
             local Knob = Instance.new("Frame")
             Knob.Size = UDim2.new(0, 14, 0, 14)
@@ -431,18 +436,25 @@ function RyuuLib:CreateWindow(config)
             Knob.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
             Knob.BorderSizePixel = 0
             Knob.ZIndex = 3
-            Knob.Parent = ToggleBtn
+            Knob.Parent = ToggleBG
 
             Instance.new("UICorner", Knob).CornerRadius = UDim.new(1, 0)
 
+            local ToggleClickArea = Instance.new("TextButton")
+            ToggleClickArea.Size = UDim2.new(1, 0, 1, 0)
+            ToggleClickArea.BackgroundTransparency = 1
+            ToggleClickArea.Text = ""
+            ToggleClickArea.ZIndex = 4
+            ToggleClickArea.Parent = ToggleBG
+
             local state = false
 
-            ToggleBtn.MouseButton1Click:Connect(function()
+            ToggleClickArea.MouseButton1Click:Connect(function()
                 state = not state
                 local goalPos = state and UDim2.new(0, 23, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
                 local bgCol = state and BLUE or Color3.fromRGB(30, 30, 40)
                 TweenService:Create(Knob, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Position = goalPos, BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
-                TweenService:Create(ToggleBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundColor3 = bgCol}):Play()
+                TweenService:Create(ToggleBG, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundColor3 = bgCol}):Play()
                 callback(state)
             end)
         end
@@ -463,9 +475,11 @@ function RyuuLib:CreateWindow(config)
             Btn.Parent = TabContent
 
             Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
+
             local BStroke = Instance.new("UIStroke")
             BStroke.Color = BLUE
             BStroke.Thickness = 1.5
+            BStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             BStroke.Parent = Btn
 
             Btn.MouseButton1Click:Connect(function()
@@ -511,9 +525,11 @@ function RyuuLib:CreateWindow(config)
             Row.Parent = TabContent
 
             Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
+
             local SRowStroke = Instance.new("UIStroke")
             SRowStroke.Color = BLUE_DIM
             SRowStroke.Thickness = 1
+            SRowStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             SRowStroke.Parent = Row
 
             local LabelTop = Instance.new("TextLabel")
@@ -521,6 +537,105 @@ function RyuuLib:CreateWindow(config)
             LabelTop.Position = UDim2.new(0, 12, 0, 4)
             LabelTop.BackgroundTransparency = 1
             LabelTop.Text = label .. ":  " .. tostring(default)
+            LabelTop.TextColor3 = TEXT_BLUE
+            LabelTop.Font = Enum.Font.Code
+            LabelTop.TextSize = 13
+            LabelTop.TextXAlignment = Enum.TextXAlignment.Left
+            LabelTop.Parent = Row
+
+            local Track = Instance.new("Frame")
+            Track.Size = UDim2.new(1, -24, 0, 6)
+            Track.Position = UDim2.new(0, 12, 0, 36)
+            Track.BackgroundColor3 = Color3.fromRGB(30, 30, 45)
+            Track.BorderSizePixel = 0
+            Track.Parent = Row
+
+            Instance.new("UICorner", Track).CornerRadius = UDim.new(1, 0)
+
+            local defaultRatio = (default - min) / (max - min)
+
+            local Fill = Instance.new("Frame")
+            Fill.Size = UDim2.new(defaultRatio, 0, 1, 0)
+            Fill.BackgroundColor3 = BLUE
+            Fill.BorderSizePixel = 0
+            Fill.Parent = Track
+
+            Instance.new("UICorner", Fill).CornerRadius = UDim.new(1, 0)
+
+            local Thumb = Instance.new("Frame")
+            Thumb.Size = UDim2.new(0, 14, 0, 14)
+            Thumb.Position = UDim2.new(defaultRatio, -7, 0.5, -7)
+            Thumb.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+            Thumb.BorderSizePixel = 0
+            Thumb.ZIndex = 4
+            Thumb.Parent = Track
+
+            Instance.new("UICorner", Thumb).CornerRadius = UDim.new(1, 0)
+
+            local sliding = false
+
+            local function updateSlider(inputX)
+                local trackAbsPos = Track.AbsolutePosition.X
+                local trackAbsSize = Track.AbsoluteSize.X
+                local ratio = math.clamp((inputX - trackAbsPos) / trackAbsSize, 0, 1)
+                local value = math.floor(min + (max - min) * ratio)
+                Fill.Size = UDim2.new(ratio, 0, 1, 0)
+                Thumb.Position = UDim2.new(ratio, -7, 0.5, -7)
+                LabelTop.Text = label .. ":  " .. tostring(value)
+                callback(value)
+            end
+
+            Track.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    sliding = true
+                    updateSlider(input.Position.X)
+                end
+            end)
+
+            Thumb.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    sliding = true
+                end
+            end)
+
+            UserInputService.InputChanged:Connect(function(input)
+                if sliding and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+                    updateSlider(input.Position.X)
+                end
+            end)
+
+            UserInputService.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+                    sliding = false
+                end
+            end)
+        end
+
+        function Tab:CreateInput(config)
+            local label = config.Name or "Input"
+            local placeholder = config.Placeholder or "Type here..."
+            local callback = config.Callback or function() end
+
+            local Row = Instance.new("Frame")
+            Row.Size = UDim2.new(1, 0, 0, 55)
+            Row.BackgroundColor3 = BG_CARD
+            Row.BorderSizePixel = 0
+            Row.LayoutOrder = getOrder()
+            Row.Parent = TabContent
+
+            Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
+
+            local IStroke = Instance.new("UIStroke")
+            IStroke.Color = BLUE_DIM
+            IStroke.Thickness = 1
+            IStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
+            IStroke.Parent = Row
+
+            local LabelTop = Instance.new("TextLabel")
+            LabelTop.Size = UDim2.new(1, -12, 0, 20)
+            LabelTop.Position = UDim2.new(0, 12, 0, 4)
+            LabelTop.BackgroundTransparency = 1
+            LabelTop.Text = label
             LabelTop.TextColor3 = TEXT_BLUE
             LabelTop.Font = Enum.Font.Code
             LabelTop.TextSize = 13
@@ -542,9 +657,11 @@ function RyuuLib:CreateWindow(config)
             InputBox.Parent = Row
 
             Instance.new("UICorner", InputBox).CornerRadius = UDim.new(0, 4)
+
             local IBStroke = Instance.new("UIStroke")
             IBStroke.Color = BLUE
             IBStroke.Thickness = 1
+            IBStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             IBStroke.Parent = InputBox
 
             local P = Instance.new("UIPadding")
@@ -570,9 +687,11 @@ function RyuuLib:CreateWindow(config)
             Row.Parent = TabContent
 
             Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
+
             local SelStroke = Instance.new("UIStroke")
             SelStroke.Color = BLUE_DIM
             SelStroke.Thickness = 1
+            SelStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             SelStroke.Parent = Row
 
             local LabelTop = Instance.new("TextLabel")
@@ -598,9 +717,11 @@ function RyuuLib:CreateWindow(config)
             SelectBtn.Parent = Row
 
             Instance.new("UICorner", SelectBtn).CornerRadius = UDim.new(0, 4)
+
             local SBStroke = Instance.new("UIStroke")
             SBStroke.Color = BLUE
             SBStroke.Thickness = 1
+            SBStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             SBStroke.Parent = SelectBtn
 
             local dropOpen = false
@@ -616,9 +737,11 @@ function RyuuLib:CreateWindow(config)
             DropFrame.Parent = Row
 
             Instance.new("UICorner", DropFrame).CornerRadius = UDim.new(0, 4)
+
             local DFStroke = Instance.new("UIStroke")
             DFStroke.Color = BLUE
             DFStroke.Thickness = 1
+            DFStroke.ApplyStrokeMode = Enum.ApplyStrokeMode.Border
             DFStroke.Parent = DropFrame
 
             local DropList = Instance.new("UIListLayout")
