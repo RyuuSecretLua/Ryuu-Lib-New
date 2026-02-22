@@ -1,4 +1,3 @@
-
 local RyuuLib = {}
 RyuuLib.__index = RyuuLib
 
@@ -15,47 +14,106 @@ ScreenGui.ResetOnSpawn = false
 ScreenGui.IgnoreGuiInset = true
 ScreenGui.Parent = game:GetService("CoreGui")
 
-local function makeSplash(title, callback)
+local BLUE = Color3.fromRGB(0, 150, 255)
+local BLUE_DIM = Color3.fromRGB(0, 100, 200)
+local TEXT_BLUE = Color3.fromRGB(140, 200, 255)
+local BG_MAIN = Color3.fromRGB(8, 8, 12)
+local BG_CARD = Color3.fromRGB(14, 14, 20)
+local BG_TOP = Color3.fromRGB(5, 5, 8)
+
+local function makeSplash(title, animName, animText, callback)
     local Splash = Instance.new("Frame")
-    Splash.Size = UDim2.new(1, 0, 1, 0)
-    Splash.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
-    Splash.BackgroundTransparency = 0
+    Splash.Size = UDim2.new(0, 380, 0, 180)
+    Splash.Position = UDim2.new(0.5, -190, 0.5, -90)
+    Splash.BackgroundColor3 = BG_MAIN
+    Splash.BackgroundTransparency = 1
     Splash.BorderSizePixel = 0
     Splash.ZIndex = 100
     Splash.Parent = ScreenGui
 
-    local SplashLabel = Instance.new("TextLabel")
-    SplashLabel.Size = UDim2.new(1, 0, 0, 40)
-    SplashLabel.Position = UDim2.new(0, 0, 0.5, -20)
-    SplashLabel.BackgroundTransparency = 1
-    SplashLabel.Text = "⚡ Ryuu Lib"
-    SplashLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    SplashLabel.Font = Enum.Font.GothamBold
-    SplashLabel.TextSize = 0
-    SplashLabel.ZIndex = 101
-    SplashLabel.Parent = Splash
+    Instance.new("UICorner", Splash).CornerRadius = UDim.new(0, 12)
+
+    local BorderOuter = Instance.new("UIStroke")
+    BorderOuter.Color = BLUE
+    BorderOuter.Thickness = 2
+    BorderOuter.Parent = Splash
+
+    local EmojiLabel = Instance.new("TextLabel")
+    EmojiLabel.Size = UDim2.new(0, 60, 0, 60)
+    EmojiLabel.Position = UDim2.new(0.5, -30, 0, 20)
+    EmojiLabel.BackgroundTransparency = 1
+    EmojiLabel.Text = "⚡"
+    EmojiLabel.TextColor3 = BLUE
+    EmojiLabel.Font = Enum.Font.GothamBold
+    EmojiLabel.TextSize = 36
+    EmojiLabel.ZIndex = 101
+    EmojiLabel.Parent = Splash
+
+    local RyuuLabel = Instance.new("TextLabel")
+    RyuuLabel.Size = UDim2.new(1, 0, 0, 28)
+    RyuuLabel.Position = UDim2.new(0, 0, 0, 82)
+    RyuuLabel.BackgroundTransparency = 1
+    RyuuLabel.Text = animText
+    RyuuLabel.TextColor3 = TEXT_BLUE
+    RyuuLabel.Font = Enum.Font.Code
+    RyuuLabel.TextSize = 0
+    RyuuLabel.TextTransparency = 1
+    RyuuLabel.ZIndex = 101
+    RyuuLabel.Parent = Splash
 
     local SubLabel = Instance.new("TextLabel")
-    SubLabel.Size = UDim2.new(1, 0, 0, 24)
-    SubLabel.Position = UDim2.new(0, 0, 0.5, 26)
+    SubLabel.Size = UDim2.new(1, 0, 0, 20)
+    SubLabel.Position = UDim2.new(0, 0, 0, 114)
     SubLabel.BackgroundTransparency = 1
     SubLabel.Text = title
-    SubLabel.TextColor3 = Color3.fromRGB(160, 160, 160)
-    SubLabel.Font = Enum.Font.Gotham
+    SubLabel.TextColor3 = Color3.fromRGB(100, 160, 220)
+    SubLabel.Font = Enum.Font.Code
     SubLabel.TextSize = 0
+    SubLabel.TextTransparency = 1
     SubLabel.ZIndex = 101
     SubLabel.Parent = Splash
 
-    TweenService:Create(SplashLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {TextSize = 28}):Play()
-    task.delay(0.2, function()
-        TweenService:Create(SubLabel, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {TextSize = 16}):Play()
+    local AnimLabel = Instance.new("TextLabel")
+    AnimLabel.Size = UDim2.new(1, 0, 0, 16)
+    AnimLabel.Position = UDim2.new(0, 0, 0, 138)
+    AnimLabel.BackgroundTransparency = 1
+    AnimLabel.Text = animName
+    AnimLabel.TextColor3 = BLUE_DIM
+    AnimLabel.Font = Enum.Font.Code
+    AnimLabel.TextSize = 12
+    AnimLabel.TextTransparency = 1
+    AnimLabel.ZIndex = 101
+    AnimLabel.Parent = Splash
+
+    local rotation = 0
+    local spinConn
+    spinConn = RunService.Heartbeat:Connect(function(dt)
+        rotation = rotation + dt * 300
+        EmojiLabel.Rotation = rotation
     end)
 
-    task.delay(1.6, function()
-        TweenService:Create(Splash, TweenInfo.new(0.5, Enum.EasingStyle.Quint), {BackgroundTransparency = 1}):Play()
-        TweenService:Create(SplashLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
-        TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {TextTransparency = 1}):Play()
-        task.delay(0.5, function()
+    TweenService:Create(Splash, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {BackgroundTransparency = 0}):Play()
+
+    task.delay(0.3, function()
+        TweenService:Create(RyuuLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {TextSize = 22, TextTransparency = 0}):Play()
+    end)
+
+    task.delay(0.55, function()
+        TweenService:Create(SubLabel, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {TextSize = 15, TextTransparency = 0}):Play()
+    end)
+
+    task.delay(0.75, function()
+        TweenService:Create(AnimLabel, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {TextTransparency = 0}):Play()
+    end)
+
+    task.delay(2.2, function()
+        spinConn:Disconnect()
+        TweenService:Create(EmojiLabel, TweenInfo.new(0.3), {TextTransparency = 1}):Play()
+        TweenService:Create(RyuuLabel, TweenInfo.new(0.3), {TextTransparency = 1}):Play()
+        TweenService:Create(SubLabel, TweenInfo.new(0.3), {TextTransparency = 1}):Play()
+        TweenService:Create(AnimLabel, TweenInfo.new(0.3), {TextTransparency = 1}):Play()
+        TweenService:Create(Splash, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {BackgroundTransparency = 1}):Play()
+        task.delay(0.45, function()
             Splash:Destroy()
             callback()
         end)
@@ -67,20 +125,31 @@ function RyuuLib:CreateWindow(config)
     Window.TabList = {}
 
     local title = config.Title or "Ryuu Lib"
+    local animName = config.AnimName or "Initializing..."
+    local animText = config.AnimText or "⚡ Ryuu Lib"
+
+    local BorderFrame = Instance.new("Frame")
+    BorderFrame.Size = UDim2.new(0, 504, 0, 344)
+    BorderFrame.Position = UDim2.new(0.5, -252, 0.5, -172)
+    BorderFrame.BackgroundColor3 = BLUE
+    BorderFrame.BorderSizePixel = 0
+    BorderFrame.Visible = false
+    BorderFrame.Parent = ScreenGui
+
+    Instance.new("UICorner", BorderFrame).CornerRadius = UDim.new(0, 10)
 
     local MainWindow = Instance.new("Frame")
-    MainWindow.Size = UDim2.new(0, 500, 0, 340)
-    MainWindow.Position = UDim2.new(0.5, -250, 0.5, -170)
-    MainWindow.BackgroundColor3 = Color3.fromRGB(15, 15, 15)
+    MainWindow.Size = UDim2.new(1, -4, 1, -4)
+    MainWindow.Position = UDim2.new(0, 2, 0, 2)
+    MainWindow.BackgroundColor3 = BG_MAIN
     MainWindow.BorderSizePixel = 0
-    MainWindow.Visible = false
-    MainWindow.Parent = ScreenGui
+    MainWindow.Parent = BorderFrame
 
     Instance.new("UICorner", MainWindow).CornerRadius = UDim.new(0, 8)
 
     local TopBar = Instance.new("Frame")
     TopBar.Size = UDim2.new(1, 0, 0, 40)
-    TopBar.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+    TopBar.BackgroundColor3 = BG_TOP
     TopBar.BorderSizePixel = 0
     TopBar.ZIndex = 2
     TopBar.Parent = MainWindow
@@ -90,7 +159,7 @@ function RyuuLib:CreateWindow(config)
     local TopFix = Instance.new("Frame")
     TopFix.Size = UDim2.new(1, 0, 0.5, 0)
     TopFix.Position = UDim2.new(0, 0, 0.5, 0)
-    TopFix.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+    TopFix.BackgroundColor3 = BG_TOP
     TopFix.BorderSizePixel = 0
     TopFix.ZIndex = 2
     TopFix.Parent = TopBar
@@ -100,8 +169,8 @@ function RyuuLib:CreateWindow(config)
     TitleLabel.Position = UDim2.new(0, 14, 0, 0)
     TitleLabel.BackgroundTransparency = 1
     TitleLabel.Text = "⚡ " .. title
-    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.Font = Enum.Font.GothamBold
+    TitleLabel.TextColor3 = TEXT_BLUE
+    TitleLabel.Font = Enum.Font.Code
     TitleLabel.TextSize = 14
     TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
     TitleLabel.ZIndex = 3
@@ -110,58 +179,73 @@ function RyuuLib:CreateWindow(config)
     local MinBtn = Instance.new("TextButton")
     MinBtn.Size = UDim2.new(0, 26, 0, 20)
     MinBtn.Position = UDim2.new(1, -58, 0.5, -10)
-    MinBtn.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    MinBtn.BackgroundColor3 = BG_CARD
     MinBtn.Text = "-"
-    MinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    MinBtn.Font = Enum.Font.GothamBold
+    MinBtn.TextColor3 = TEXT_BLUE
+    MinBtn.Font = Enum.Font.Code
     MinBtn.TextSize = 16
     MinBtn.BorderSizePixel = 0
     MinBtn.ZIndex = 3
     MinBtn.Parent = TopBar
 
     Instance.new("UICorner", MinBtn).CornerRadius = UDim.new(0, 5)
+    local MinStroke = Instance.new("UIStroke")
+    MinStroke.Color = BLUE
+    MinStroke.Thickness = 1.5
+    MinStroke.Parent = MinBtn
 
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Size = UDim2.new(0, 26, 0, 20)
     CloseBtn.Position = UDim2.new(1, -28, 0.5, -10)
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(180, 40, 40)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(140, 20, 20)
     CloseBtn.Text = "X"
-    CloseBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-    CloseBtn.Font = Enum.Font.GothamBold
+    CloseBtn.TextColor3 = TEXT_BLUE
+    CloseBtn.Font = Enum.Font.Code
     CloseBtn.TextSize = 12
     CloseBtn.BorderSizePixel = 0
     CloseBtn.ZIndex = 3
     CloseBtn.Parent = TopBar
 
     Instance.new("UICorner", CloseBtn).CornerRadius = UDim.new(0, 5)
+    local CloseStroke = Instance.new("UIStroke")
+    CloseStroke.Color = BLUE
+    CloseStroke.Thickness = 1.5
+    CloseStroke.Parent = CloseBtn
 
     local Sidebar = Instance.new("Frame")
     Sidebar.Size = UDim2.new(0, 120, 1, -40)
     Sidebar.Position = UDim2.new(0, 0, 0, 40)
-    Sidebar.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+    Sidebar.BackgroundColor3 = BG_TOP
     Sidebar.BorderSizePixel = 0
     Sidebar.ZIndex = 2
     Sidebar.Parent = MainWindow
 
-    local SideBottomCornerFix = Instance.new("Frame")
-    SideBottomCornerFix.Size = UDim2.new(1, 0, 0, 8)
-    SideBottomCornerFix.Position = UDim2.new(0, 0, 1, -8)
-    SideBottomCornerFix.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
-    SideBottomCornerFix.BorderSizePixel = 0
-    SideBottomCornerFix.ZIndex = 2
-    SideBottomCornerFix.Parent = Sidebar
+    local SideBottomFix = Instance.new("Frame")
+    SideBottomFix.Size = UDim2.new(1, 0, 0, 8)
+    SideBottomFix.Position = UDim2.new(0, 0, 1, -8)
+    SideBottomFix.BackgroundColor3 = BG_TOP
+    SideBottomFix.BorderSizePixel = 0
+    SideBottomFix.ZIndex = 2
+    SideBottomFix.Parent = Sidebar
 
     local SideRightFix = Instance.new("Frame")
     SideRightFix.Size = UDim2.new(0, 8, 1, 0)
     SideRightFix.Position = UDim2.new(1, -8, 0, 0)
-    SideRightFix.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+    SideRightFix.BackgroundColor3 = BG_TOP
     SideRightFix.BorderSizePixel = 0
     SideRightFix.ZIndex = 2
     SideRightFix.Parent = Sidebar
 
+    local SideDivider = Instance.new("Frame")
+    SideDivider.Size = UDim2.new(0, 1, 1, -40)
+    SideDivider.Position = UDim2.new(0, 120, 0, 40)
+    SideDivider.BackgroundColor3 = BLUE_DIM
+    SideDivider.BorderSizePixel = 0
+    SideDivider.Parent = MainWindow
+
     local ContentArea = Instance.new("Frame")
-    ContentArea.Size = UDim2.new(1, -120, 1, -40)
-    ContentArea.Position = UDim2.new(0, 120, 0, 40)
+    ContentArea.Size = UDim2.new(1, -121, 1, -40)
+    ContentArea.Position = UDim2.new(0, 121, 0, 40)
     ContentArea.BackgroundTransparency = 1
     ContentArea.BorderSizePixel = 0
     ContentArea.Parent = MainWindow
@@ -177,52 +261,55 @@ function RyuuLib:CreateWindow(config)
             dragging = true
             dragInput = input
             dragStart = input.Position
-            startPos = MainWindow.Position
+            startPos = BorderFrame.Position
         end
     end)
 
     TopBar.InputEnded:Connect(function(input)
-        if input == dragInput then
-            dragging = false
-        end
+        if input == dragInput then dragging = false end
     end)
 
     UserInputService.InputChanged:Connect(function(input)
         if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
             local delta = input.Position - dragStart
-            MainWindow.Position = UDim2.new(
-                startPos.X.Scale,
-                startPos.X.Offset + delta.X,
-                startPos.Y.Scale,
-                startPos.Y.Offset + delta.Y
-            )
+            BorderFrame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
         end
     end)
 
     MinBtn.MouseButton1Click:Connect(function()
         minimized = not minimized
         if minimized then
-            TweenService:Create(MainWindow, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 500, 0, 40)}):Play()
+            TweenService:Create(BorderFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 504, 0, 44)}):Play()
             task.delay(0.15, function()
                 Sidebar.Visible = false
                 ContentArea.Visible = false
+                SideDivider.Visible = false
             end)
         else
             Sidebar.Visible = true
             ContentArea.Visible = true
-            TweenService:Create(MainWindow, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 500, 0, 340)}):Play()
+            SideDivider.Visible = true
+            TweenService:Create(BorderFrame, TweenInfo.new(0.3, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 504, 0, 344)}):Play()
         end
     end)
 
     CloseBtn.MouseButton1Click:Connect(function()
-        TweenService:Create(MainWindow, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)}):Play()
+        TweenService:Create(BorderFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint, Enum.EasingDirection.In), {Size = UDim2.new(0, 0, 0, 0)}):Play()
         task.delay(0.3, function() ScreenGui:Destroy() end)
     end)
 
-    makeSplash(title, function()
-        MainWindow.Size = UDim2.new(0, 0, 0, 0)
-        MainWindow.Visible = true
-        TweenService:Create(MainWindow, TweenInfo.new(0.4, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 500, 0, 340)}):Play()
+    local hue = 0
+    RunService.Heartbeat:Connect(function(dt)
+        hue = (hue + dt * 0.4) % 1
+        local pulse = math.abs(math.sin(hue * math.pi * 2))
+        local g = math.floor(100 + pulse * 50)
+        BorderFrame.BackgroundColor3 = Color3.fromRGB(0, g, 255)
+    end)
+
+    makeSplash(title, animName, animText, function()
+        BorderFrame.Size = UDim2.new(0, 0, 0, 0)
+        BorderFrame.Visible = true
+        TweenService:Create(BorderFrame, TweenInfo.new(0.45, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, 504, 0, 344)}):Play()
     end)
 
     function Window:CreateTab(name)
@@ -231,29 +318,31 @@ function RyuuLib:CreateWindow(config)
         local TabBtn = Instance.new("TextButton")
         TabBtn.Size = UDim2.new(1, -16, 0, 30)
         TabBtn.Position = UDim2.new(0, 8, 0, 8 + (#Window.TabList * 36))
-        TabBtn.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+        TabBtn.BackgroundColor3 = BG_CARD
         TabBtn.BackgroundTransparency = 1
         TabBtn.Text = name
-        TabBtn.TextColor3 = Color3.fromRGB(120, 120, 120)
-        TabBtn.Font = Enum.Font.Gotham
+        TabBtn.TextColor3 = Color3.fromRGB(80, 130, 180)
+        TabBtn.Font = Enum.Font.Code
         TabBtn.TextSize = 13
         TabBtn.BorderSizePixel = 0
-        TabBtn.TextXAlignment = Enum.TextXAlignment.Left
+        TabBtn.TextXAlignment = Enum.TextXAlignment.Center
         TabBtn.ZIndex = 3
         TabBtn.Parent = Sidebar
 
         Instance.new("UICorner", TabBtn).CornerRadius = UDim.new(0, 6)
 
-        local UIPadding = Instance.new("UIPadding")
-        UIPadding.PaddingLeft = UDim.new(0, 10)
-        UIPadding.Parent = TabBtn
+        local TabStroke = Instance.new("UIStroke")
+        TabStroke.Color = BLUE_DIM
+        TabStroke.Thickness = 1
+        TabStroke.Transparency = 0.6
+        TabStroke.Parent = TabBtn
 
         local TabContent = Instance.new("ScrollingFrame")
         TabContent.Size = UDim2.new(1, 0, 1, 0)
         TabContent.BackgroundTransparency = 1
         TabContent.BorderSizePixel = 0
         TabContent.ScrollBarThickness = 3
-        TabContent.ScrollBarImageColor3 = Color3.fromRGB(60, 60, 60)
+        TabContent.ScrollBarImageColor3 = BLUE_DIM
         TabContent.CanvasSize = UDim2.new(0, 0, 0, 0)
         TabContent.Visible = false
         TabContent.Parent = ContentArea
@@ -273,23 +362,22 @@ function RyuuLib:CreateWindow(config)
             TabContent.CanvasSize = UDim2.new(0, 0, 0, UIListLayout.AbsoluteContentSize.Y + 20)
         end)
 
-        local tabData = {btn = TabBtn, content = TabContent}
+        local tabData = {btn = TabBtn, content = TabContent, stroke = TabStroke}
         table.insert(Window.TabList, tabData)
 
         local function selectTab()
             for _, t in pairs(Window.TabList) do
-                TweenService:Create(t.btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(120, 120, 120), BackgroundTransparency = 1}):Play()
+                TweenService:Create(t.btn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(80, 130, 180), BackgroundTransparency = 1}):Play()
+                t.stroke.Transparency = 0.6
                 t.content.Visible = false
             end
-            TweenService:Create(TabBtn, TweenInfo.new(0.2), {TextColor3 = Color3.fromRGB(255, 255, 255), BackgroundTransparency = 0}):Play()
+            TweenService:Create(TabBtn, TweenInfo.new(0.2), {TextColor3 = TEXT_BLUE, BackgroundTransparency = 0}):Play()
+            TabStroke.Transparency = 0
             TabContent.Visible = true
         end
 
         TabBtn.MouseButton1Click:Connect(selectTab)
-
-        if #Window.TabList == 1 then
-            selectTab()
-        end
+        if #Window.TabList == 1 then selectTab() end
 
         local function getOrder()
             return #TabContent:GetChildren() - 2
@@ -301,20 +389,24 @@ function RyuuLib:CreateWindow(config)
 
             local Row = Instance.new("Frame")
             Row.Size = UDim2.new(1, 0, 0, 40)
-            Row.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+            Row.BackgroundColor3 = BG_CARD
             Row.BorderSizePixel = 0
             Row.LayoutOrder = getOrder()
             Row.Parent = TabContent
 
             Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
+            local RowStroke = Instance.new("UIStroke")
+            RowStroke.Color = BLUE_DIM
+            RowStroke.Thickness = 1
+            RowStroke.Parent = Row
 
             local Label = Instance.new("TextLabel")
             Label.Size = UDim2.new(1, -60, 1, 0)
             Label.Position = UDim2.new(0, 12, 0, 0)
             Label.BackgroundTransparency = 1
             Label.Text = label
-            Label.TextColor3 = Color3.fromRGB(255, 255, 255)
-            Label.Font = Enum.Font.Gotham
+            Label.TextColor3 = TEXT_BLUE
+            Label.Font = Enum.Font.Code
             Label.TextSize = 13
             Label.TextXAlignment = Enum.TextXAlignment.Left
             Label.Parent = Row
@@ -322,17 +414,21 @@ function RyuuLib:CreateWindow(config)
             local ToggleBtn = Instance.new("TextButton")
             ToggleBtn.Size = UDim2.new(0, 40, 0, 20)
             ToggleBtn.Position = UDim2.new(1, -50, 0.5, -10)
-            ToggleBtn.BackgroundColor3 = Color3.fromRGB(45, 45, 45)
+            ToggleBtn.BackgroundColor3 = Color3.fromRGB(30, 30, 40)
             ToggleBtn.Text = ""
             ToggleBtn.BorderSizePixel = 0
             ToggleBtn.Parent = Row
 
             Instance.new("UICorner", ToggleBtn).CornerRadius = UDim.new(1, 0)
+            local TStroke = Instance.new("UIStroke")
+            TStroke.Color = BLUE
+            TStroke.Thickness = 1.5
+            TStroke.Parent = ToggleBtn
 
             local Knob = Instance.new("Frame")
             Knob.Size = UDim2.new(0, 14, 0, 14)
             Knob.Position = UDim2.new(0, 3, 0.5, -7)
-            Knob.BackgroundColor3 = Color3.fromRGB(180, 180, 180)
+            Knob.BackgroundColor3 = Color3.fromRGB(200, 200, 200)
             Knob.BorderSizePixel = 0
             Knob.ZIndex = 3
             Knob.Parent = ToggleBtn
@@ -344,9 +440,8 @@ function RyuuLib:CreateWindow(config)
             ToggleBtn.MouseButton1Click:Connect(function()
                 state = not state
                 local goalPos = state and UDim2.new(0, 23, 0.5, -7) or UDim2.new(0, 3, 0.5, -7)
-                local bgCol = state and Color3.fromRGB(255, 255, 255) or Color3.fromRGB(45, 45, 45)
-                local knobCol = state and Color3.fromRGB(15, 15, 15) or Color3.fromRGB(180, 180, 180)
-                TweenService:Create(Knob, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Position = goalPos, BackgroundColor3 = knobCol}):Play()
+                local bgCol = state and BLUE or Color3.fromRGB(30, 30, 40)
+                TweenService:Create(Knob, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Position = goalPos, BackgroundColor3 = Color3.fromRGB(255, 255, 255)}):Play()
                 TweenService:Create(ToggleBtn, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {BackgroundColor3 = bgCol}):Play()
                 callback(state)
             end)
@@ -358,21 +453,25 @@ function RyuuLib:CreateWindow(config)
 
             local Btn = Instance.new("TextButton")
             Btn.Size = UDim2.new(1, 0, 0, 40)
-            Btn.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+            Btn.BackgroundColor3 = BG_CARD
             Btn.Text = label
-            Btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-            Btn.Font = Enum.Font.Gotham
+            Btn.TextColor3 = TEXT_BLUE
+            Btn.Font = Enum.Font.Code
             Btn.TextSize = 13
             Btn.BorderSizePixel = 0
             Btn.LayoutOrder = getOrder()
             Btn.Parent = TabContent
 
             Instance.new("UICorner", Btn).CornerRadius = UDim.new(0, 6)
+            local BStroke = Instance.new("UIStroke")
+            BStroke.Color = BLUE
+            BStroke.Thickness = 1.5
+            BStroke.Parent = Btn
 
             Btn.MouseButton1Click:Connect(function()
-                TweenService:Create(Btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(40, 40, 40)}):Play()
+                TweenService:Create(Btn, TweenInfo.new(0.1), {BackgroundColor3 = BLUE_DIM}):Play()
                 task.delay(0.15, function()
-                    TweenService:Create(Btn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(22, 22, 22)}):Play()
+                    TweenService:Create(Btn, TweenInfo.new(0.1), {BackgroundColor3 = BG_CARD}):Play()
                 end)
                 callback()
             end)
@@ -385,8 +484,8 @@ function RyuuLib:CreateWindow(config)
             Lbl.Size = UDim2.new(1, 0, 0, 26)
             Lbl.BackgroundTransparency = 1
             Lbl.Text = text
-            Lbl.TextColor3 = Color3.fromRGB(160, 160, 160)
-            Lbl.Font = Enum.Font.Gotham
+            Lbl.TextColor3 = BLUE_DIM
+            Lbl.Font = Enum.Font.Code
             Lbl.TextSize = 12
             Lbl.TextXAlignment = Enum.TextXAlignment.Left
             Lbl.LayoutOrder = getOrder()
@@ -406,113 +505,24 @@ function RyuuLib:CreateWindow(config)
 
             local Row = Instance.new("Frame")
             Row.Size = UDim2.new(1, 0, 0, 55)
-            Row.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+            Row.BackgroundColor3 = BG_CARD
             Row.BorderSizePixel = 0
             Row.LayoutOrder = getOrder()
             Row.Parent = TabContent
 
             Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
+            local SRowStroke = Instance.new("UIStroke")
+            SRowStroke.Color = BLUE_DIM
+            SRowStroke.Thickness = 1
+            SRowStroke.Parent = Row
 
             local LabelTop = Instance.new("TextLabel")
             LabelTop.Size = UDim2.new(1, -12, 0, 22)
             LabelTop.Position = UDim2.new(0, 12, 0, 4)
             LabelTop.BackgroundTransparency = 1
             LabelTop.Text = label .. ":  " .. tostring(default)
-            LabelTop.TextColor3 = Color3.fromRGB(255, 255, 255)
-            LabelTop.Font = Enum.Font.Gotham
-            LabelTop.TextSize = 13
-            LabelTop.TextXAlignment = Enum.TextXAlignment.Left
-            LabelTop.Parent = Row
-
-            local Track = Instance.new("Frame")
-            Track.Size = UDim2.new(1, -24, 0, 6)
-            Track.Position = UDim2.new(0, 12, 0, 36)
-            Track.BackgroundColor3 = Color3.fromRGB(40, 40, 40)
-            Track.BorderSizePixel = 0
-            Track.Parent = Row
-
-            Instance.new("UICorner", Track).CornerRadius = UDim.new(1, 0)
-
-            local defaultRatio = (default - min) / (max - min)
-
-            local Fill = Instance.new("Frame")
-            Fill.Size = UDim2.new(defaultRatio, 0, 1, 0)
-            Fill.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            Fill.BorderSizePixel = 0
-            Fill.Parent = Track
-
-            Instance.new("UICorner", Fill).CornerRadius = UDim.new(1, 0)
-
-            local Thumb = Instance.new("Frame")
-            Thumb.Size = UDim2.new(0, 14, 0, 14)
-            Thumb.Position = UDim2.new(defaultRatio, -7, 0.5, -7)
-            Thumb.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-            Thumb.BorderSizePixel = 0
-            Thumb.ZIndex = 4
-            Thumb.Parent = Track
-
-            Instance.new("UICorner", Thumb).CornerRadius = UDim.new(1, 0)
-
-            local sliding = false
-
-            local function updateSlider(inputX)
-                local trackAbsPos = Track.AbsolutePosition.X
-                local trackAbsSize = Track.AbsoluteSize.X
-                local ratio = math.clamp((inputX - trackAbsPos) / trackAbsSize, 0, 1)
-                local value = math.floor(min + (max - min) * ratio)
-                Fill.Size = UDim2.new(ratio, 0, 1, 0)
-                Thumb.Position = UDim2.new(ratio, -7, 0.5, -7)
-                LabelTop.Text = label .. ":  " .. tostring(value)
-                callback(value)
-            end
-
-            Track.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    sliding = true
-                    updateSlider(input.Position.X)
-                end
-            end)
-
-            Thumb.InputBegan:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    sliding = true
-                end
-            end)
-
-            UserInputService.InputChanged:Connect(function(input)
-                if sliding and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-                    updateSlider(input.Position.X)
-                end
-            end)
-
-            UserInputService.InputEnded:Connect(function(input)
-                if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-                    sliding = false
-                end
-            end)
-        end
-
-        function Tab:CreateInput(config)
-            local label = config.Name or "Input"
-            local placeholder = config.Placeholder or "Type here..."
-            local callback = config.Callback or function() end
-
-            local Row = Instance.new("Frame")
-            Row.Size = UDim2.new(1, 0, 0, 55)
-            Row.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
-            Row.BorderSizePixel = 0
-            Row.LayoutOrder = getOrder()
-            Row.Parent = TabContent
-
-            Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
-
-            local LabelTop = Instance.new("TextLabel")
-            LabelTop.Size = UDim2.new(1, -12, 0, 20)
-            LabelTop.Position = UDim2.new(0, 12, 0, 4)
-            LabelTop.BackgroundTransparency = 1
-            LabelTop.Text = label
-            LabelTop.TextColor3 = Color3.fromRGB(255, 255, 255)
-            LabelTop.Font = Enum.Font.Gotham
+            LabelTop.TextColor3 = TEXT_BLUE
+            LabelTop.Font = Enum.Font.Code
             LabelTop.TextSize = 13
             LabelTop.TextXAlignment = Enum.TextXAlignment.Left
             LabelTop.Parent = Row
@@ -520,18 +530,22 @@ function RyuuLib:CreateWindow(config)
             local InputBox = Instance.new("TextBox")
             InputBox.Size = UDim2.new(1, -24, 0, 22)
             InputBox.Position = UDim2.new(0, 12, 0, 27)
-            InputBox.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+            InputBox.BackgroundColor3 = Color3.fromRGB(5, 5, 10)
             InputBox.Text = ""
             InputBox.PlaceholderText = placeholder
-            InputBox.PlaceholderColor3 = Color3.fromRGB(80, 80, 80)
-            InputBox.TextColor3 = Color3.fromRGB(255, 255, 255)
-            InputBox.Font = Enum.Font.Gotham
+            InputBox.PlaceholderColor3 = BLUE_DIM
+            InputBox.TextColor3 = TEXT_BLUE
+            InputBox.Font = Enum.Font.Code
             InputBox.TextSize = 12
             InputBox.BorderSizePixel = 0
             InputBox.ClearTextOnFocus = false
             InputBox.Parent = Row
 
             Instance.new("UICorner", InputBox).CornerRadius = UDim.new(0, 4)
+            local IBStroke = Instance.new("UIStroke")
+            IBStroke.Color = BLUE
+            IBStroke.Thickness = 1
+            IBStroke.Parent = InputBox
 
             local P = Instance.new("UIPadding")
             P.PaddingLeft = UDim.new(0, 6)
@@ -549,21 +563,25 @@ function RyuuLib:CreateWindow(config)
 
             local Row = Instance.new("Frame")
             Row.Size = UDim2.new(1, 0, 0, 55)
-            Row.BackgroundColor3 = Color3.fromRGB(22, 22, 22)
+            Row.BackgroundColor3 = BG_CARD
             Row.BorderSizePixel = 0
             Row.LayoutOrder = getOrder()
             Row.ClipsDescendants = false
             Row.Parent = TabContent
 
             Instance.new("UICorner", Row).CornerRadius = UDim.new(0, 6)
+            local SelStroke = Instance.new("UIStroke")
+            SelStroke.Color = BLUE_DIM
+            SelStroke.Thickness = 1
+            SelStroke.Parent = Row
 
             local LabelTop = Instance.new("TextLabel")
             LabelTop.Size = UDim2.new(1, -12, 0, 20)
             LabelTop.Position = UDim2.new(0, 12, 0, 4)
             LabelTop.BackgroundTransparency = 1
             LabelTop.Text = label
-            LabelTop.TextColor3 = Color3.fromRGB(255, 255, 255)
-            LabelTop.Font = Enum.Font.Gotham
+            LabelTop.TextColor3 = TEXT_BLUE
+            LabelTop.Font = Enum.Font.Code
             LabelTop.TextSize = 13
             LabelTop.TextXAlignment = Enum.TextXAlignment.Left
             LabelTop.Parent = Row
@@ -571,28 +589,37 @@ function RyuuLib:CreateWindow(config)
             local SelectBtn = Instance.new("TextButton")
             SelectBtn.Size = UDim2.new(1, -24, 0, 22)
             SelectBtn.Position = UDim2.new(0, 12, 0, 27)
-            SelectBtn.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+            SelectBtn.BackgroundColor3 = Color3.fromRGB(5, 5, 10)
             SelectBtn.Text = options[1] or "Select..."
-            SelectBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-            SelectBtn.Font = Enum.Font.Gotham
+            SelectBtn.TextColor3 = TEXT_BLUE
+            SelectBtn.Font = Enum.Font.Code
             SelectBtn.TextSize = 12
             SelectBtn.BorderSizePixel = 0
             SelectBtn.Parent = Row
 
             Instance.new("UICorner", SelectBtn).CornerRadius = UDim.new(0, 4)
+            local SBStroke = Instance.new("UIStroke")
+            SBStroke.Color = BLUE
+            SBStroke.Thickness = 1
+            SBStroke.Parent = SelectBtn
 
             local dropOpen = false
 
             local DropFrame = Instance.new("Frame")
-            DropFrame.Size = UDim2.new(1, -24, 0, #options * 28)
+            DropFrame.Size = UDim2.new(1, -24, 0, 0)
             DropFrame.Position = UDim2.new(0, 12, 1, 4)
-            DropFrame.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+            DropFrame.BackgroundColor3 = Color3.fromRGB(5, 5, 10)
             DropFrame.BorderSizePixel = 0
             DropFrame.Visible = false
             DropFrame.ZIndex = 10
+            DropFrame.ClipsDescendants = true
             DropFrame.Parent = Row
 
             Instance.new("UICorner", DropFrame).CornerRadius = UDim.new(0, 4)
+            local DFStroke = Instance.new("UIStroke")
+            DFStroke.Color = BLUE
+            DFStroke.Thickness = 1
+            DFStroke.Parent = DropFrame
 
             local DropList = Instance.new("UIListLayout")
             DropList.SortOrder = Enum.SortOrder.LayoutOrder
@@ -601,10 +628,10 @@ function RyuuLib:CreateWindow(config)
             for i, opt in ipairs(options) do
                 local OptionBtn = Instance.new("TextButton")
                 OptionBtn.Size = UDim2.new(1, 0, 0, 28)
-                OptionBtn.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+                OptionBtn.BackgroundColor3 = Color3.fromRGB(5, 5, 10)
                 OptionBtn.Text = opt
-                OptionBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
-                OptionBtn.Font = Enum.Font.Gotham
+                OptionBtn.TextColor3 = TEXT_BLUE
+                OptionBtn.Font = Enum.Font.Code
                 OptionBtn.TextSize = 12
                 OptionBtn.BorderSizePixel = 0
                 OptionBtn.LayoutOrder = i
@@ -620,18 +647,17 @@ function RyuuLib:CreateWindow(config)
                 end)
 
                 OptionBtn.MouseEnter:Connect(function()
-                    TweenService:Create(OptionBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(25, 25, 25)}):Play()
+                    TweenService:Create(OptionBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(15, 20, 35)}):Play()
                 end)
 
                 OptionBtn.MouseLeave:Connect(function()
-                    TweenService:Create(OptionBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(10, 10, 10)}):Play()
+                    TweenService:Create(OptionBtn, TweenInfo.new(0.1), {BackgroundColor3 = Color3.fromRGB(5, 5, 10)}):Play()
                 end)
             end
 
             SelectBtn.MouseButton1Click:Connect(function()
                 dropOpen = not dropOpen
                 if dropOpen then
-                    DropFrame.Size = UDim2.new(1, -24, 0, 0)
                     DropFrame.Visible = true
                     TweenService:Create(DropFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Size = UDim2.new(1, -24, 0, #options * 28)}):Play()
                 else
