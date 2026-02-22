@@ -42,7 +42,7 @@ local function makeSplash(title, animName, animText, callback)
     EmojiLabel.Size = UDim2.new(0, 60, 0, 60)
     EmojiLabel.Position = UDim2.new(0.5, -30, 0, 20)
     EmojiLabel.BackgroundTransparency = 1
-    EmojiLabel.Text = "⚡"
+    EmojiLabel.Text = "RE"
     EmojiLabel.TextColor3 = BLUE
     EmojiLabel.Font = Enum.Font.GothamBold
     EmojiLabel.TextSize = 36
@@ -127,7 +127,7 @@ function RyuuLib:CreateWindow(config)
 
     local title = config.Title or "Ryuu Lib"
     local animName = config.AnimName or "Initializing..."
-    local animText = config.AnimText or "⚡ Ryuu Lib"
+    local animText = config.AnimText or "RE Ryuu Lib"
 
     local BorderFrame = Instance.new("Frame")
     BorderFrame.Size = UDim2.new(0, 504, 0, 344)
@@ -169,7 +169,7 @@ function RyuuLib:CreateWindow(config)
     TitleLabel.Size = UDim2.new(1, -80, 1, 0)
     TitleLabel.Position = UDim2.new(0, 14, 0, 0)
     TitleLabel.BackgroundTransparency = 1
-    TitleLabel.Text = "⚡ " .. title
+    TitleLabel.Text = "Windows V1.0" .. title
     TitleLabel.TextColor3 = TEXT_BLUE
     TitleLabel.Font = Enum.Font.Code
     TitleLabel.TextSize = 14
@@ -182,7 +182,7 @@ function RyuuLib:CreateWindow(config)
     MinBtn.Position = UDim2.new(1, -58, 0.5, -10)
     MinBtn.BackgroundColor3 = BG_CARD
     MinBtn.Text = "-"
-    MinBtn.TextColor3 = TEXT_BLUE
+    MinBtn.TextColor3 = Color3.fromRGB(255, 255, 255)
     MinBtn.Font = Enum.Font.Code
     MinBtn.TextSize = 16
     MinBtn.BorderSizePixel = 0
@@ -198,7 +198,7 @@ function RyuuLib:CreateWindow(config)
     local CloseBtn = Instance.new("TextButton")
     CloseBtn.Size = UDim2.new(0, 26, 0, 20)
     CloseBtn.Position = UDim2.new(1, -28, 0.5, -10)
-    CloseBtn.BackgroundColor3 = Color3.fromRGB(140, 20, 20)
+    CloseBtn.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
     CloseBtn.Text = "X"
     CloseBtn.TextColor3 = TEXT_BLUE
     CloseBtn.Font = Enum.Font.Code
